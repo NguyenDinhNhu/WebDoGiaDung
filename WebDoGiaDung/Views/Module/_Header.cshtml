@@ -1,0 +1,87 @@
+﻿@model IEnumerable<WebDoGiaDung.Entities.CategoryEntity>
+@{
+    Layout = null;
+}
+<header>
+    <div class="container">
+        <div class="header-top mt-2">
+            <div class="row">
+                <div class="col-md-7 d-flex align-items-center">
+                    <div class="col-md-3">
+                        <div class="logo">
+                            <a href="/">
+                                <img src="~/Public/img/image/logo.png" alt="">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        @using (Html.BeginForm("Search", "Home", FormMethod.Get, new { @class = "search-site" }))
+                        {
+                            <input class="top-input" type="text" placeholder="Bạn tìm gì" name="key" value="@(Session["keyword"] ?? "")">
+                            <button class="btn-top" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <ul class="d-flex align-items-center">
+                        @Html.Action("Login", "Module")
+                        
+                        <li class="d-flex align-items-center justify-content-center ml-3">
+                            <div class="position-relative">
+                                <i class="fa-solid fa-cart-shopping icon-top"></i>
+                                <span class="position-absolute count-cart">
+                                    @(Session["Cart"] != null ? ((List<WebDoGiaDung.Models.ModelCart>)Session["Cart"]).Count() : 0)
+                                </span>
+                            </div>
+                            <ul class="mt-3" style="margin-left: 12px;">
+                                <li class="font-weight-bold"><a href="~/gio-hang">Giỏ hàng</a></li>
+                                <li style="font-size: 13px;">
+                                    Vận chuyển toàn quốc
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="header-bottom mt-3">
+            <div class="row">
+                <div class="cate-title">
+                    <p class="m-0 pt-2 pb-2 d-none d-lg-block align-items-center">
+                        <i class="fas fa-bars"></i>
+                        <span class="ml-1 text-uppercase">Danh mục sản phẩm</span>
+                    </p>
+                </div>
+                <div class="menu-custom">
+                    <div class="menu-wrap d-none d-lg-block">
+                        <div class="d-flex align-items-center">
+                            <div class="list-menu"><a href="~/gioi-thieu">Giới thiệu</a></div>
+                            <div class="list-menu"><a href="~/tin-tuc">Tin tức</a></div>
+                            <div class="list-menu"><a href="~/lien-he">Liên hệ</a></div>
+                            @*<div class="list-menu"><a class="checkAuth" href="">Tra cứu đơn hàng</a></div>*@
+                            <div class="list-menu"><a href="#" class="notready">Tuyển dụng</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="header-content d-flex">
+                    <div class="tab-menu style-scroll">
+                        <ul>
+                            @foreach (var c in Model)
+                            {
+                                <li class="tab-menu-list"><a href="~/danh-muc/@c.Slug">@c.Name</a></li>
+                            }
+                        </ul>
+                    </div>
+
+                    <div class="banner">
+                        <img src="~/Public/img/image/banner-slider.png" alt="" class="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+

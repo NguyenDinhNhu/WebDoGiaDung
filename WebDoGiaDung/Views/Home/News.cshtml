@@ -1,0 +1,51 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<WebDoGiaDung.Entities.NewsEntity>
+@{
+    ViewBag.Title = "News";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="news mt-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h3>Tất cả bài viết</h3>
+                @foreach (var item in Model)
+                {
+                    <div class=" news-box">
+                        <div class="news-item d-flex align-items-center">
+                            <a href="~/tin-tuc/@item.Slug" class="news-img">
+                                <img src="~/Public/img/news/@item.Image" alt="" class="w-100" />
+                            </a>
+                            <div class="intro-news">
+                                <h5 class="mt-1"><a href="~/tin-tuc/@item.Slug">@item.Name</a></h5>
+                                <p class="news-content">
+                                    @item.Summary
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="pagination">
+                    @Html.PagedListPager(Model, page => Url.Action("News", new { page }))
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <h3>Bài viết mới nhất</h3>
+                @foreach (var n in ViewBag.ListNews)
+                {
+                    <div class="news-latest d-flex">
+                        <a href="~/tin-tuc/@n.Slug" class="news-img">
+                            <img src="~/Public/img/news/@n.Image" alt="" class="w-100">
+                        </a>
+                        <div class="intro-news">
+                            <h6 class="mt-1"><a href="~/tin-tuc/@n.Slug">@n.Name</a></h6>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+

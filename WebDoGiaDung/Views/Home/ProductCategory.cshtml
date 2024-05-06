@@ -1,0 +1,58 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<WebDoGiaDung.Entities.ProductEntity>
+@{
+    ViewBag.Title = ViewBag.CateName;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="mt-4">
+    <div class="container">
+        <div class="header-product">
+            <h2 class="title-home">@ViewBag.CateName</h2>
+            <div class="sort-product" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                <div class="d-flex justify-content-between">
+                    <div>@ViewBag.Sort</div>
+                    <i class="fa-solid fa-angle-down icon-down"></i>
+                </div>
+                <ul class="other-sort collapse" id="collapseExample">
+                    <li><a href="@Url.Action("ProductCategory", "Home", new {slug = @ViewBag.slug, sortOrder = "asc", typeSort = "price" })">Giá thấp đến cao</a></li>
+                    <li><a href="@Url.Action("ProductCategory", "Home", new {slug = @ViewBag.slug, sortOrder = "desc", typeSort = "price" })">Giá cao đến thấp</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-3 col-sm-6 mt-3">
+                    <div class="product-item">
+                        <div class="product-img">
+                            <a href="~/@item.Slug">
+                                <img src="~/Public/img/product/@item.Image" alt="" class="w-100">
+                            </a>
+                        </div>
+                        <div class="detail-item">
+                            @if (item.Discount == 1)
+                            {
+                                <p class="box-price">@String.Format("{0:0,0₫}", item.PriceSale)</p>
+                                <div class="d-flex">
+                                    <p class="old-price">@String.Format("{0:0,0₫}", item.Price)</p>
+                                    <p class="discount">(-@String.Format("{0:0}", ((item.Price - item.PriceSale) / item.Price * 100))%)</p>
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="box-price">@String.Format("{0:0,0₫}", item.Price)</p>
+                            }
+                            <p style="margin-bottom: 20px;"><a href="~/@item.Slug" class="product-name">@item.Name</a></p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="pagination">
+            @Html.PagedListPager(Model, page => Url.Action("ProductCategory", new { page }))
+        </div>
+    </div>
+</section>
+

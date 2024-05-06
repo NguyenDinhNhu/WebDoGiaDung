@@ -1,0 +1,140 @@
+﻿@using WebDoGiaDung.Models
+@{
+    Layout = null;
+}
+
+@if (Session["Cart"] != null)
+{
+<div class="row">
+    <div class="col-6 profile">
+        @if (Session["User_Name"] != null)
+        {
+            <h5>Thông tin giao hàng</h5>
+            <div class="row">
+                <div class="col-3 my-3">Họ tên</div>
+                <div class="col-9 my-2">
+                    <input name="FullName" id="fullname" type="text" class="form-control rounded-0" value="@ViewBag.Info.FullName">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3 my-3">Số điện thoại</div>
+                <div class="col-9 my-2">
+                    <input name="Phone" type="number" id="phone" class="form-control rounded-0" value="@ViewBag.Info.Phone">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3 my-3">Email</div>
+                <div class="col-9 my-2">
+                    <input id="email" name="CustomerEmail" type="text" class="form-control rounded-0" value="@ViewBag.Info.Email">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3 my-3">Địa chỉ</div>
+                <div class="col-9 my-2">
+                    <input id="address" name="CustomerAddress" type="text" class="form-control rounded-0"
+                           value="@ViewBag.Info.Address">
+                </div>
+            </div>
+            <button class="btn btn-checkout" id="check-out">Thanh toán</button>
+        }
+        else
+        {
+            <h5>Thông tin giao hàng</h5>
+            <div class="row">
+                <div class="col-3 my-3">Họ tên</div>
+                <div class="col-9 my-2">
+                    <input name="FullName" type="text" class="form-control rounded-0" value="">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3 my-3">Số điện thoại</div>
+                <div class="col-9 my-2">
+                    <input name="Phone" type="number" class="form-control rounded-0" value="">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3 my-3">Email</div>
+                <div class="col-9 my-2">
+                    <input id="email" name="Email" type="text" class="form-control rounded-0" value="">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3 my-3">Địa chỉ</div>
+                <div class="col-9 my-2">
+                    <input id="address" name="Address" type="text" class="form-control rounded-0"
+                           value="">
+                </div>
+            </div>
+            <button class="btn btn-checkout checkAuth">Thanh toán</button>
+        }
+
+    </div>
+    <div class="col-md-6 detail-cart">
+        <ul class="list-order style-scroll">
+            @{ decimal Tong = 0;}
+            @foreach (var item in (List<ModelCart>)Session["Cart"])
+            {
+                Tong += (item.Price * item.Quantity);
+                <li class="cart-item">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="cart-img">
+                                <img src="~/Public/img/product/@item.Image" alt="" class="w-100">
+                            </div>
+                            <h6 class="mt-2">@item.Name</h6>
+                        </div>
+                        <div class="col-md-5">
+                            <p class="cart-price">@item.Price.ToString("N0")₫</p>
+                            <div class="cart-qty">
+                                <button class="btn btn-white rounded-0 border update"
+                                        data-options="minus" data-id="@item.ProductID"
+                                        style="width:30px; height:30px;margin-top:-5px; line-height:15px;font-weight: bold;">
+                                    <i class="fa-solid fa-minus icon-qty"></i>
+                                </button>
+                                <input type="number"
+                                       style="width:50px; height:30px;margin:0 -6px;outline:0;text-align:center"
+                                       class="rounded-0 border text-secondary etd pl-3 border-right-0"
+                                       value="@item.Quantity" min="1" id="qtyDpt">
+                                <button class="btn btn-white rounded-0 border update" data-options="add" data-id="@item.ProductID"
+                                        style="width:30px; height:30px;margin-top:-5px; line-height:15px;font-weight: bold;">
+                                    <i class="fa-solid fa-plus icon-qty"></i>
+                                </button>
+                            </div>
+                            <a href="#" class="b-remove-one delete-cartItem update"
+                               data-options="remove" data-id="@item.ProductID">Xóa</a>
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+        <div class="area_total">
+            <div class="d-flex justify-content-between">
+                <p>Tổng tiền:</p>
+                <p class="cart-text-price">@Tong.ToString("N0")₫</p>
+            </div>
+            <div class="d-flex justify-content-between">
+                <p>Phí vận chuyển:</p>
+                <p class="cart-text-price">0₫</p>
+            </div>
+            <div class="d-flex justify-content-between">
+                <p>Giảm giá:</p>
+                <p class="cart-text-price">0₫</p>
+            </div>
+            <div class="d-flex justify-content-between checkout-box">
+                <p>Thanh toán:</p>
+                <p class="cart-text-price">@Tong.ToString("N0")₫</p>
+            </div>
+        </div>
+    </div>
+</div>
+}
+else 
+{ 
+    <div class="cart-empty">
+        <img src="~/Public/img/image/null.png" alt="Giỏ hàng của bạn đang trống" class="d-block m-auto" width="250" />
+        <p class="text-center font-weight-bold" style="opacity: .6;">Giỏ hàng của bạn trống</p>
+        <div class="btn rounded-0 m-auto d-block" style="width:200px; background:#ee4d2d">
+            <a href="/" class="text-light text-decoration-none">MUA NGAY</a>
+        </div>
+    </div>
+}

@@ -1,0 +1,133 @@
+﻿@model WebDoGiaDung.Models.ImageFile
+@{
+    ViewBag.Title = "Quản lý ảnh";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<section class="content py-2">
+    <div class="container-fluid">
+        <!--Content-->
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-8">
+                        @Html.Partial("_MessageAlert")
+                        <h5 class="text-csm">@ViewBag.Title</h5>
+                    </div>
+                    <div class="col-4">
+                        <div class="float-right pt-1">
+                            <button type="button" class="btn btn-primary btn-sm image-popup" data-toggle="modal" data-target="#exampleModalCenter" data-id="@ViewBag.Id">
+                                <i class="fas fa-plus fa-xs"></i>&nbsp; Thêm mới
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm">
+                                <a href="~/Admin/Product/Index" class="text-white"><i class="fas fa-door-open"></i>&nbsp; Thoát</a>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="product" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="no-sort text-center" style="width:3rem;">STT</th>
+                            <th class="no-sort text-center" style="width:3rem;">ID</th>
+                            <th class="no-sort text-center">Hình ảnh</th>
+                            <th class="no-sort text-center">Trạng thái</th>
+                            <th class="no-sort text-center" style="width:10rem">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{var stt = 1;}
+                        @foreach (var item in ViewBag.ListImage)
+                        {
+                            <tr>
+                                <td>@stt</td>
+                                <td class="text-center">@item.Id</td>
+                                <td><img src="~/Public/img/product-img/@item.Image" alt="Error" width="70" height="70" class="d-block m-auto" />  </td>
+                                <td class="text-center">
+                                    <div class="changeStatusImage btn" data-id="@item.Id">
+
+                                        @if (item.Status == 1)
+                                        {
+                                            <div class="text-success h6 font-italic cst@(item.Id)">Hoạt Động</div> }
+                                        else
+                                        {
+                                            <div class="text-danger h6 font-italic cst@(item.Id)" style="text-decoration:underline">Tạm Khóa</div>}
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <!--<button type="button" class="btn btn-warning btn-sm text-white btn-editImage" data-toggle="modal"
+                                            data-placement="top" data-target="#exampleModalCenter1" data-id="@item.Id" title="Chỉnh sửa">-->
+                                        @*<a href="@Url.Action("Edit", "ProductImage", new { id = item.Id })" class="text-white"></a>*@<!--<i class="fas fa-pen"></i>
+                                    </button>-->
+                                    <button type="submit" class="btn btn-danger btn-sm delete-img" title="Xóa" data-id="@item.Id">
+                                        @*<a href="@Url.Action("Delete", "ProductImage", new { id = item.Id })" class="text-white"></a>*@<i class="far fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            stt++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal Create -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Các ảnh liên quan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    @Html.Label("Hình ảnh", htmlAttributes: new { @class = "control-label" })
+                    <div class="">
+                        @Html.TextBoxFor(model => model.Files, new { type = "file", @class = "control-label listImage", @multiple = "multiple" })
+                        @Html.ValidationMessageFor(model => model.Files, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Thoát</button>
+                <button type="submit" class="btn btn-primary add-listImage">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Edit -->
+<div class="modal fade" id="exampleModalCenter1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Thay đổi ảnh</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    @Html.Label("Hình ảnh", htmlAttributes: new { @class = "control-label" })
+                    <div class="">
+                        @Html.TextBoxFor(model => model.Files, new { type = "file", @class = "control-label listImage"})
+                        @Html.ValidationMessageFor(model => model.Files, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Thoát</button>
+                <button type="submit" class="btn btn-primary edit-image">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>

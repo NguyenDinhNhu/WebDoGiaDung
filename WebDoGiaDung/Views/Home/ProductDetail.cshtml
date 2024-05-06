@@ -1,0 +1,132 @@
+﻿@model WebDoGiaDung.Entities.ProductEntity
+@{
+    ViewBag.Title = Model.Name;
+    ViewBag.MetaTitle = Model.MetaTitle;
+    ViewBag.MetaKey = Model.MetaKey;
+    ViewBag.MetaDesc = Model.MetaDesc;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("_Notification")
+<section class="mt-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="slider-for">
+                    @foreach (var item in ViewBag.ImageList)
+                    {
+                        <div style="border: 1px solid #ccc">
+                            <img src="~/Public/img/product-img/@item.Image" alt="" class="w-100" style="height: 500px;">
+                        </div>
+                    }
+                </div>
+                <div class="slider-nav mt-2">
+                    @foreach (var item in ViewBag.ImageList)
+                    {
+                        <div style="border: 1px solid #ccc">
+                            <img src="~/Public/img/product-img/@item.Image" alt="" class="w-100" style="height: 100px;">
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="product-detail">
+                    <h3 class="mt-4">@Model.Name</h3>
+                    <div class="product-price-box d-flex">
+                        <p class="product-new-price">@String.Format("{0:0,0₫}", Model.PriceSale)</p>
+                        <p class="product-old-price">@String.Format("{0:0,0₫}", Model.Price)</p>
+                    </div>
+                    <div class="quantity-box">
+                        <p class="text-secondary d-inline pr-3">Số lượng</p>
+
+                        <button class="btn btn-white rounded-0 border tru" onclick="return Tru();"
+                                style="width:30px; height:30px;margin-top:-5px; line-height:15px;font-weight: bold;">
+                            <i class="fa-solid fa-minus icon-qty"></i>
+                        </button>
+                        <input type="number"
+                               style="width:50px; height:30px;margin:0 -6px;outline:0;text-align:center"
+                               class="rounded-0 border text-secondary etd pl-3 border-right-0" value="1" min="1"
+                               id="qtyDpt">
+                        <button class="btn btn-white rounded-0 border cong" onclick="return Cong();"
+                                style="width:30px; height:30px;margin-top:-5px; line-height:15px;font-weight: bold;">
+                            <i class="fa-solid fa-plus icon-qty"></i>
+                        </button>
+                        <div class="check-quantity mt-4">
+                            @if (Model.Quantity > 0)
+                            {
+                                <i class="fas fa-check text-success"></i>
+                                <p class="d-inline ml-2" style="font-size: 20px;">Còn hàng</p>
+                                <p class="d-inline ml-2">(@Model.Quantity sản phẩm có sẵn)</p>
+                            }
+                            else if (Model.Quantity == 0)
+                            {
+                                <i class="fa-solid fa-xmark text-danger"></i>
+                                <p class="d-inline ml-2" style="font-size: 20px;">Hết hàng</p>
+                            }
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button class="btn btn-danger" id="buy-btn" data-id="@Model.Id">
+                            <i class="fa-solid fa-cart-shopping"
+                               style="margin-right: 12px;"></i>Thêm vào giỏ hàng
+                        </button>
+                    </div>
+                    <div class="short-desc">
+                        @Html.Raw(Model.ShortDesc)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="detail-description">
+                    @Html.Raw(Model.DetailDesc)
+                </div>
+            </div>
+            <div class="col-12">
+                <h4 class="mt-4">Sản phẩm liên quan</h4>
+                <div class="related-product mt-4">
+                    @foreach (var item in ViewBag.ListOther)
+                    {
+                        <div class="item-product-home" style="margin: 0 4px;">
+                            <div class="product-img">
+                                <a href="~/@item.Slug">
+                                    <img src="~/Public/img/product/@item.Image" alt="" class="w-100" style="height: 220px;">
+                                </a>
+                            </div>
+                            <div class="detail-item">
+                                @if (item.Discount == 1)
+                                {
+                                    <p class="box-price">@String.Format("{0:0,0₫}", item.PriceSale)</p>
+                                    <div class="d-flex">
+                                        <p class="old-price">@String.Format("{0:0,0₫}", item.Price)</p>
+                                        <p class="discount">(-@String.Format("{0:0}", ((item.Price - item.PriceSale) / item.Price * 100))%)</p>
+                                    </div>
+                                }
+                                else if (item.Discount == 2)
+                                {
+                                    <p class="box-price">@String.Format("{0:0,0₫}", item.Price)</p>
+                                }
+                                <p style="margin-bottom: 20px;"><a href="~/@item.Slug" class="product-name">@item.Name</a></p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    
+    function Cong() {
+        const num = parseInt($('.etd').val());
+        if (num < @Model.Quantity) {
+            $('.etd').val(num + 1);
+        }
+    }
+    function Tru() {
+        const num = parseInt($('.etd').val());
+        if (num > 1) {
+            $('.etd').val(num - 1);
+        }
+    }
+</script>

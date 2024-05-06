@@ -1,0 +1,205 @@
+﻿@model IEnumerable<WebDoGiaDung.Entities.ProductEntity>
+
+@{
+    ViewBag.Title = "Shop Gia Dụng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="home-policy">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="policy-item d-flex">
+                    <img src="~/Public/img/image/policy-1.png" alt="" class="policy-img">
+                    <div class="policy-content">
+                        <h5>Sản phẩm chính hãng</h5>
+                        <p>Hoàn trả giá trị sản phẩm nếu phát hiện hàng giả, hàng nhái</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="policy-item d-flex">
+                    <img src="~/Public/img/image/policy-2.png" alt="" class="policy-img">
+                    <div class="policy-content">
+                        <h5>Vận chuyển toàn quốc</h5>
+                        <p>Sẵn sàng phục vụ vận chuyển trên 63 tỉnh thành của cả nước.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="policy-item d-flex">
+                    <img src="~/Public/img/image/policy-3.png" alt="" class="policy-img">
+                    <div class="policy-content">
+                        <h5>Đảm bảo quyền lợi</h5>
+                        <p>Hình thức xem hàng trước , thanh toán sau.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="product-hot d-flex">
+    <div class="container">
+        <div class="d-flex justify-content-between">
+            <a href="">
+                <h2 class="title-home">Sản phẩm hot</h2>
+            </a>
+            <a href="">Xem thêm</a>
+        </div>
+        <div class="block-product-hot">
+            <div class="banner-product-hot">
+                <img src="~/Public/img/image/sp-hot.png" alt="" class="w-100">
+            </div>
+            <div class="product-slider">
+                @foreach (var item in ViewBag.HotProduct)
+                {
+                    <div class="item-product-home">
+                        <div class="product-img">
+                            <a href="~/@item.Slug">
+                                <img src="~/Public/img/product/@item.Image" alt="" class="w-100" style="height: 180px;">
+                            </a>
+                        </div>
+                        <div class="detail-item">
+                            @if (item.Discount == 1)
+                            {
+                                <p class="box-price">@String.Format("{0:0,0₫}", item.PriceSale)</p>
+                                <div class="d-flex">
+                                    <p class="old-price">@String.Format("{0:0,0₫}", item.Price)</p>
+                                    <p class="discount">(-@String.Format("{0:0}", ((item.Price - item.PriceSale) / item.Price * 100))%)</p>
+                                </div>
+                            }
+                            else if (item.Discount == 2)
+                            {
+                                <p class="box-price">@String.Format("{0:0,0₫}", item.Price)</p>
+                            }
+                            <p style="margin-bottom: 20px;"><a href="~/@item.Slug" class="product-name">@item.Name</a></p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="product-new d-flex" style="margin-top: 40px;">
+    <div class="container">
+        <div class="d-flex justify-content-between">
+            <a href="">
+                <h2 class="title-home">Sản phẩm mới</h2>
+            </a>
+            <a href="">Xem thêm</a>
+        </div>
+        <div class="block-product-new">
+            <div class="banner-product-hot">
+                <img src="~/Public/img/image/sp-moi.png" alt="" class="w-100">
+            </div>
+            <div class="product-slider">
+                @foreach (var item in ViewBag.NewProduct)
+                {
+                    <div class="item-product-home">
+                        <div class="product-img">
+                            <a href="~/@item.Slug">
+                                <img src="~/Public/img/product/@item.Image" alt="" class="w-100" style="height: 180px;">
+                            </a>
+                        </div>
+                        <div class="detail-item">
+                            @if (item.Discount == 1)
+                            {
+                                <p class="box-price">@String.Format("{0:0,0₫}", item.PriceSale)</p>
+                                <div class="d-flex">
+                                    <p class="old-price">@String.Format("{0:0,0₫}", item.Price)</p>
+                                    <p class="discount">(-@String.Format("{0:0}", ((item.Price - item.PriceSale) / item.Price * 100))%)</p>
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="box-price">@String.Format("{0:0,0₫}", item.Price)</p>
+                            }
+                            <p style="margin-bottom: 20px;"><a href="~/@item.Slug" class="product-name">@item.Name</a></p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<section style="margin-top: 60px;">
+    <div class="container">
+        @foreach (var c in ViewBag.CateProduct)
+        {
+            <div class="d-flex mt-4" style="flex-direction: column;">
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="~/danh-muc/@c.Slug">
+                        <h2 class="title-home">@c.Name</h2>
+                    </a>
+                    <a href="~/danh-muc/@c.Slug">Xem thêm</a>
+                </div>
+                <div class="block-product-new">
+                    <div class="banner-product-hot">
+                        <img src="~/Public/img/category/@c.Image" alt="" class="w-100">
+                    </div>
+                    <div class="row">
+                        @foreach (var p in Model.Where(p => c.Id == p.CategoryId).Take(8))
+                        {
+                            <div class="item-product-home">
+                                <div class="product-img">
+                                    <a href="~/@p.Slug">
+                                        <img src="~/Public/img/product/@p.Image" alt="" class="w-100" style="height: 200px;">
+                                    </a>
+                                </div>
+                                <div class="detail-item">
+                                    <p class="box-price">@String.Format("{0:0,0₫}", p.PriceSale)</p>
+                                    @if (p.Discount == 1)
+                                    {
+                                        <div class="d-flex">
+                                            <p class="old-price">@String.Format("{0:0,0₫}", p.Price)</p>
+                                            <p class="discount">(-@String.Format("{0:0}", ((p.Price - p.PriceSale) / p.Price * 100))%)</p>
+                                        </div>
+                                    }
+                                    <p style="margin-bottom: 20px;"><a href="~/@p.Slug" class="product-name">@p.Name</a></p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+<section class="share-exp" style="margin-top: 40px;">
+    <div class="container">
+        <a href="#">
+            <h2 class="title-home">Chia sẻ kinh nghiệm</h2>
+        </a>
+        <div class="box-news">
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="~/Public/img/image/share-exp.png" alt="" class="w-100">
+                </div>
+                <div class="col-md-6 news-list">
+                    @foreach (var item in ViewBag.NewsList)
+                    {
+                        <div class="news-list-item">
+                            <a href="" class="img-news-list">
+                                <img src="~/Public/img/news/@item.Image" alt="" class="w-100">
+                            </a>
+                            <a href="" class="news-title">
+                                @item.Name
+                            </a>
+                        </div>
+                    }
+                </div>
+                <div class="col-md-12" style="margin-top: 12px;">
+                    <a href="~/tin-tuc" class="float-right more-news">
+                        Xem tất cả bài viết
+                        <i class="fas fa-caret-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

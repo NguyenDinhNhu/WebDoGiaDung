@@ -1,0 +1,15 @@
+﻿@model WebDoGiaDung.Entities.NewsEntity
+@{
+    ViewBag.Title = "NewsDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="mt-4">
+    <div class="container">
+        @*<h3>@Model.Name</h3>*@
+        <div class="news-detail">
+           @Html.Raw(Model.Detail)
+        </div>
+    </div>
+</section>
+

@@ -1,0 +1,112 @@
+﻿@model IEnumerable<WebDoGiaDung.Entities.OrdersEntity>
+@{
+    ViewBag.Title = "Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Html.Partial("_Notification")
+<section class="orders mt-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="float-left pl-3 border-bottom">
+                    <p class="order-username" style="font-weight: bold; color: #eb1c24;">@Session["User_Name"]</p>
+                    <p class="text-secondary"><i class="fas fa-pen fa-sm"></i> Sửa hồ sơ</p>
+                </div>
+                <div style="clear:both"></div>
+                <div class="mt-4 pl-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link  text-secondary" href="~/account/userprofile/@Session["User_ID"]" style="font-size: 14px;">
+                                <i class="far fa-id-card"></i> Thông tin tài khoản
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" href="~/account/order/@Session["User_ID"]" style="font-size: 14px;">
+                                <i class="far fa-file-alt"></i>
+                                &nbsp Đơn mua
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary notready" href="#" style="font-size: 14px;">
+                                <i class="far fa-bell"></i>&nbsp
+                                Thông báo
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link text-secondary" href="~/account/userlogout?url=@("")" style="font-size: 14px;">
+                                <i class="fas fa-sign-out-alt"></i>&nbsp Đăng xuất
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-9">
+                @foreach (var item in Model)
+                {
+                    <div class="order-item">
+                        <div class="d-flex justify-content-between bd-bottom">
+                            <p>Mã đơn hàng:  <span style="color: #e41b35;">@item.Code</span></p>
+                            <p>
+                                Trạng thái:
+                                @if (item.Status == 1)
+                                {
+                                    <span style="color: #e41b35;">Chờ xử lý</span>
+                                }
+                                else if (item.Status == 2)
+                                {
+                                    <span style="color: #e41b35;">Đang xử lý</span>
+                                }
+                                else if (item.Status == 3)
+                                {
+                                    <span style="color: #e41b35;">Hoàn thành</span>
+                                }
+
+                            </p>
+                        </div>
+                        <div class="order-product">
+                            @{ decimal Total = 0;}
+                            @foreach (var io in ViewBag.itemOrder)
+                            {
+                                if (item.Id == io.OrderId)
+                                {
+                                    Total += io.Price * io.Quantity;
+                                    foreach (var p in ViewBag.productOrder)
+                                    {
+                                        if (p.Id == io.ProductId)
+                                        {
+                                            <div class="row bd-bottom mt-2 w-100">
+                                                <div class="col-md-2">
+                                                    <img src="~/Public/img/product/@p.Image" alt="" class="w-100">
+                                                </div>
+                                                <div class="col-md-8 order-product">
+                                                    <h5><a href="~/@p.Slug">@p.Name</a></h5>
+                                                    <p>Số lượng: @io.Quantity</p>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="text-right order-product-price"> @String.Format("{0:0,0₫}", io.Price)</div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                }
+                            }
+                        </div>
+                        <div class="col-md-12 mt-2">
+                            <div class="text-right" style="font-size: 18px; font-weight: bold;">
+                                <p>Tổng tiền: <span class="cart-price">@String.Format("{0:0,0₫}", Total)</span></p>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <p>Chưa nhận được đánh giá</p>
+                            <div class="d-flex">
+                                <button class="btn-rating notready" style="margin-right: 8px;">Đánh giá</button>
+                                <a href="~/account/orderdetails/@item.Id" class="btn btn-rating" style="background-color: #fff; color: #000; border: 1px solid #ccc;">Chi tiết đơn hàng</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
